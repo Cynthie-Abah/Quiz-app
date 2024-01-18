@@ -51,9 +51,6 @@ const questions = [
     }
 ];
 
-// Add more questions as needed
-
-
 let currentQuestionIndex = 0;
 let score = 0;
 let timer;
@@ -66,12 +63,13 @@ function startQuiz() {
 function showQuestion() {
     const questionText = document.getElementById("question-text");
     const choicesSelect = document.getElementById("choices-select");
+    const nextButton = document.getElementById("nextButton");
 
     const currentQuestion = questions[currentQuestionIndex];
 
     questionText.textContent = currentQuestion.question;
 
-    choicesSelect.innerHTML = "";
+    choicesSelect.innerHTML = "<option >select correct option</option>";
     currentQuestion.choices.forEach((choice, index) => {
         const option = document.createElement("option");
         option.value = index;
@@ -79,7 +77,8 @@ function showQuestion() {
         choicesSelect.add(option);
     });
 
-    nextButton.disabled = true;
+    nextButton.disabled = false; // Enable the next button for the next question
+    choicesSelect.disabled = false; // Enable the choices for the new question
 }
 
 function checkAnswer() {
@@ -91,8 +90,9 @@ function checkAnswer() {
         score++;
     }
 
+    choicesSelect.disabled = true; // Disable choices after answering
+    nextButton.disabled = true; // Disable next button until feedback is shown
     showFeedback(selectedAnswerIndex === currentQuestion.correctAnswerIndex);
-    
 }
 
 function showFeedback(isCorrect) {
@@ -111,7 +111,6 @@ function showFeedback(isCorrect) {
 }
 
 function nextQuestion() {
-    checkAnswer();
     currentQuestionIndex++;
 
     if (currentQuestionIndex < questions.length) {
